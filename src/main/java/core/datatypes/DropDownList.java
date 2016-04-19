@@ -22,7 +22,7 @@ public class DropDownList extends WebItem {
 		Log.info("Selecting '"+visibleText+"' in the '"+this.locator+"' drop down list");
 		Select userTypeDropdown = new Select(this.getActiveItem());
 		userTypeDropdown.selectByVisibleText(visibleText);
-		Browser.waitForAjax(Global.DEFAULT_AJAX_WAIT);
+		Browser.waitForJQueryExecution(Global.DEFAULT_AJAX_WAIT);
 	}
 	
 	//function added by weina
@@ -30,7 +30,7 @@ public class DropDownList extends WebItem {
 		Log.info("Selcting index-'"+index+"' in the '"+this.locator+"' drop down list");
 		Select userTypeDropdown = new Select(this.getActiveItem());
 		userTypeDropdown.selectByIndex(index);
-		Browser.waitForAjax(Global.DEFAULT_AJAX_WAIT);
+		Browser.waitForJQueryExecution(Global.DEFAULT_AJAX_WAIT);
 	}
 	
 	//function added by weina

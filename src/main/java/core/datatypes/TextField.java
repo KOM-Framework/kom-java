@@ -26,7 +26,7 @@ public class TextField extends WebItem {
 	public void sendKeys(Keys keys){
 		Log.info("Sending '"+keys.name()+"' keys to the '"+this.locator+"' text field");
 		getActiveItem().sendKeys(keys);
-		Browser.waitForAjax(Global.DEFAULT_AJAX_WAIT);
+		Browser.waitForJQueryExecution(Global.DEFAULT_AJAX_WAIT);
 	}
 	
 	public String getText(){

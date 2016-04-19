@@ -11,29 +11,33 @@ import org.testng.annotations.Optional;
 
 import core.AssertLogger;
 import core.Log;
+import core.Reflect;
 
 public abstract class WebPage extends WebDynamicInit{
 	
 	private String pageName = this.getClass().getName();
 	protected ArrayList<String> invokeArgs;
-	protected abstract By webPageId();
-	protected abstract void invoke();
+	protected abstract void invokeActions();
 	
 	public WebPage(@Optional("") String... invokeArgs){
 		this.invokeArgs=new ArrayList<String>(Arrays.asList(invokeArgs));
-		if (!exists(0)){
+		initElements(this);	
+	}
+	
+	public final void invoke(){
+		if (!exists()){
 			Log.info("Invoking '"+pageName+"' page");
-			invoke();
+			invokeActions();
 			AssertLogger.assertTrue(exists(10), pageName + " does not exists after invoke attempt in 10 seconds");
-			initElements(this);	
 		}
 	}
 	
-	public boolean exists(int waitTime){
+	public boolean exists(@Optional int... waitTime){
+		int waitValue=waitTime.length==0?0:waitTime[0];
 		boolean result=false;
-		WebDriverWait wait = new WebDriverWait(Browser.getDriver(), waitTime);
+		WebDriverWait wait = new WebDriverWait(Browser.getDriver(), waitValue);
 		try{
-			WebElement item = wait.until(ExpectedConditions.elementToBeClickable(webPageId()));
+			WebElement item = wait.until(ExpectedConditions.presenceOfElementLocated((By) Reflect.getFieldValueFromField(this, "webPageId", "byId")));
 			result=item!=null;
 		}catch(Exception e){
 		}

@@ -1,8 +1,5 @@
 package core.web;
 
-import java.awt.AWTException;
-import java.awt.Robot;
-import java.awt.event.KeyEvent;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
@@ -23,7 +20,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import core.Global;
 import core.Log;
-
 public class Browser {
 
 	private static Browser browser;
@@ -86,11 +82,11 @@ public class Browser {
 		return textExists(By.xpath("//*[contains(text(),'" + text + "')]"), seconds);
 	}
 	
-	public static void waitForAjax(int time) {
+	public static void waitForJQueryExecution(int time) {
 		(new WebDriverWait(getDriver(), time)).until(new ExpectedCondition<Boolean>() {
 			public Boolean apply(WebDriver d) {
 				JavascriptExecutor js = (JavascriptExecutor) d;
-				return (Boolean) js.executeScript("return !!window.jQuery && window.jQuery.active == 0");
+				return (Boolean) js.executeScript("return !!window.jQuery?window.jQuery.active == 0:true");
 			}
 		});
 		Browser.sleep(100);
@@ -119,24 +115,4 @@ public class Browser {
 		profile.setPreference("browser.download.manager.closeWhenDone", false);
 		}
 	
-	public static void pressKeys(String string) {
-		try {
-			Robot r = new Robot();
-			for (int i = 0; i < string.length(); i++) {
-				char c = string.charAt(i);
-				if (Character.isUpperCase(c)) {
-					r.keyPress(KeyEvent.VK_SHIFT);
-				}
-				r.keyPress(Character.toUpperCase(c));
-				r.keyRelease(Character.toUpperCase(c));
-
-				if (Character.isUpperCase(c)) {
-					r.keyRelease(KeyEvent.VK_SHIFT);
-				}
-			}
-		} catch (AWTException e) {
-			e.printStackTrace();
-		}
-	}
-
 }
