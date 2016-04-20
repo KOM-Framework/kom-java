@@ -12,19 +12,16 @@ public class NewLogForEachRunFileAppender extends FileAppender {
 	public NewLogForEachRunFileAppender() {
 	}
 
-	public NewLogForEachRunFileAppender(Layout layout, String filename,
-			boolean append, boolean bufferedIO, int bufferSize)
-			throws IOException {
+	public NewLogForEachRunFileAppender(Layout layout, String filename, boolean append, boolean bufferedIO,
+			int bufferSize) throws IOException {
 		super(layout, filename, append, bufferedIO, bufferSize);
 	}
 
-	public NewLogForEachRunFileAppender(Layout layout, String filename,
-			boolean append) throws IOException {
+	public NewLogForEachRunFileAppender(Layout layout, String filename, boolean append) throws IOException {
 		super(layout, filename, append);
 	}
 
-	public NewLogForEachRunFileAppender(Layout layout, String filename)
-			throws IOException {
+	public NewLogForEachRunFileAppender(Layout layout, String filename) throws IOException {
 		super(layout, filename);
 	}
 
@@ -34,8 +31,7 @@ public class NewLogForEachRunFileAppender extends FileAppender {
 				fileName = getNewLogFileName();
 				setFile(fileName, fileAppend, bufferedIO, bufferSize);
 			} catch (Exception e) {
-				errorHandler.error("Error while activating log options", e,
-						ErrorCode.FILE_OPEN_FAILURE);
+				errorHandler.error("Error while activating log options", e, ErrorCode.FILE_OPEN_FAILURE);
 			}
 		}
 	}
@@ -44,9 +40,9 @@ public class NewLogForEachRunFileAppender extends FileAppender {
 		if (fileName != null) {
 			final File logFile = new File(fileName);
 			final String fileName = logFile.getName();
-			String newFolderName =""+System.currentTimeMillis()+"";
-			String newFileName = logFile.getParent()+"\\"+newFolderName+"\\"+fileName;
-			Global.logFolderPath=newFolderName;
+			String newFolderName = "" + System.currentTimeMillis() + "";
+			String newFileName = logFile.getParent() + "\\" + newFolderName + "\\" + fileName;
+			Global.logFolderPath = newFolderName;
 			return newFileName;
 		}
 		return null;

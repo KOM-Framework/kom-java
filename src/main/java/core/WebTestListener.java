@@ -4,13 +4,12 @@ import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
 
-
 public class WebTestListener implements ITestListener {
 
 	@Override
 	public void onTestStart(ITestResult result) {
 		Log.info("==============================================");
-		Log.info("Started test: "+result.getName());
+		Log.info("Started test: " + result.getName());
 		Log.info("==============================================");
 	}
 
@@ -28,7 +27,7 @@ public class WebTestListener implements ITestListener {
 	public void onTestFailure(ITestResult result) {
 		String testCaseName = result.getName();
 		Log.info("==============================================");
-		Log.info("Finished test: "+result.getName()+" with status: FAILED");
+		Log.info("Finished test: " + result.getName() + " with status: FAILED");
 		Log.info("==============================================");
 		Log.info("");
 		try {
@@ -43,7 +42,7 @@ public class WebTestListener implements ITestListener {
 	@Override
 	public void onTestSkipped(ITestResult result) {
 		Log.info("==============================================");
-		Log.info("Finished test: "+result.getName()+" with status: SKIPPED");
+		Log.info("Finished test: " + result.getName() + " with status: SKIPPED");
 		Log.info("==============================================");
 		Log.info("");
 		Log.sessionLog.clear();
@@ -55,12 +54,12 @@ public class WebTestListener implements ITestListener {
 
 	@Override
 	public void onStart(ITestContext context) {
-		Log.info("Started tests from the class - "+context.getClass().getName());
+		Log.info("Started tests from the class - " + context.getClass().getName());
 	}
 
 	@Override
 	public void onFinish(ITestContext context) {
-		
+
 	}
 
 }

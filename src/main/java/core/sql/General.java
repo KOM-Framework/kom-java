@@ -28,10 +28,8 @@ public class General {
 				protected String sqlQuery;
 				protected String maxWaitTime;
 
-				private Runnable init(String dbIpAddress, String dbPort,
-						String databaseName, String databaseUserName,
-						String databasePassword, String sqlQuery,
-						String maxWaitTime) {
+				private Runnable init(String dbIpAddress, String dbPort, String databaseName, String databaseUserName,
+						String databasePassword, String sqlQuery, String maxWaitTime) {
 					this.dbIpAddress = dbIpAddress;
 					this.dbPort = dbPort;
 					this.databaseName = databaseName;
@@ -49,56 +47,54 @@ public class General {
 				public void getData() {
 					System.out.println("CONNECTION THREAD IP:" + dbIpAddress);
 					Connection conn = null;
-					String url = "jdbc:sqlserver://" + dbIpAddress + ":"
-							+ dbPort + ";DatabaseName=" + databaseName;
+					String url = "jdbc:sqlserver://" + dbIpAddress + ":" + dbPort + ";DatabaseName=" + databaseName;
 					Statement stmt = null;
 					ResultSet result = null;
 					try {
 						Class.forName(sqlDriver).newInstance();
-						conn = DriverManager.getConnection(url,
-								databaseUserName, databasePassword);
+						conn = DriverManager.getConnection(url, databaseUserName, databasePassword);
 						stmt = conn.createStatement();
-						boolean found=false;
+						boolean found = false;
 						long startTime = System.currentTimeMillis();
 						long maxTime = Long.parseLong(maxWaitTime);
 						while (System.currentTimeMillis() - startTime < maxTime) {
 							result = stmt.executeQuery(sqlQuery);
-							found=result.isBeforeFirst();
+							found = result.isBeforeFirst();
 							if (found) {
-								//System.out.println("FOUND IN IP:" + dbIpAddress);
-//								while (result.next()) {
-//									ResultSetMetaData rsmd = result
-//											.getMetaData();
-									
-									//Log.info("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-//									for (int i = 1; i <= rsmd.getColumnCount(); i++) {
-//										String columName = rsmd.getColumnName(i);
-//										System.out.println(columName + "	"+ result.getString(columName));
-										//Log.info(columName + "	"+ result.getString(columName));
-									}
-									//Log.info("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-								}
-								//break;
-//							}else{
-								//Thread.sleep(10);
-//							}
-//						}
-						if (!found){
-							//System.out.println("NOT FOUND IN IP:" + dbIpAddress + " AFTER " + maxWaitTime + " ms");
+								// System.out.println("FOUND IN IP:" +
+								// dbIpAddress);
+								// while (result.next()) {
+								// ResultSetMetaData rsmd = result
+								// .getMetaData();
+
+								// Log.info("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+								// for (int i = 1; i <= rsmd.getColumnCount();
+								// i++) {
+								// String columName = rsmd.getColumnName(i);
+								// System.out.println(columName + " "+
+								// result.getString(columName));
+								// Log.info(columName + " "+
+								// result.getString(columName));
+							}
+							// Log.info("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+						}
+						// break;
+						// }else{
+						// Thread.sleep(10);
+						// }
+						// }
+						if (!found) {
+							// System.out.println("NOT FOUND IN IP:" +
+							// dbIpAddress + " AFTER " + maxWaitTime + " ms");
 						}
 						conn.close();
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				}
-			}.init(	confings.get("dbIpAddress"),
-					confings.get("dbPort"),
-					confings.get("databaseName"),
-					confings.get("databaseUserName"),
-					confings.get("databasePassword"),
-					confings.get("sqlQuery"),
-					confings.get("maxWaitTime")
-					));
+			}.init(confings.get("dbIpAddress"), confings.get("dbPort"), confings.get("databaseName"),
+					confings.get("databaseUserName"), confings.get("databasePassword"), confings.get("sqlQuery"),
+					confings.get("maxWaitTime")));
 		}
 		es.shutdown();
 		try {
@@ -118,7 +114,6 @@ public class General {
 			confings.put(s.substring(0, i), s.substring(i + 1, s.length()));
 		}
 		return confings;
-
 	}
 
 }

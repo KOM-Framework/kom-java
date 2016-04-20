@@ -17,33 +17,34 @@ public abstract class WebPage extends WebDynamicInit{
 	
 	private String pageName = this.getClass().getName();
 	protected ArrayList<String> invokeArgs;
+
 	protected abstract void invokeActions();
-	
-	public WebPage(@Optional("") String... invokeArgs){
-		this.invokeArgs=new ArrayList<String>(Arrays.asList(invokeArgs));
-		initElements(this);	
+
+	public WebPage(@Optional("") String... invokeArgs) {
+		this.invokeArgs = new ArrayList<String>(Arrays.asList(invokeArgs));
+		initElements(this);
 	}
-	
-	public final void invoke(){
-		if (!exists()){
-			Log.info("Invoking '"+pageName+"' page");
+
+	public final void invoke() {
+		if (!exists()) {
+			Log.info("Invoking '" + pageName + "' page");
 			invokeActions();
 			AssertLogger.assertTrue(exists(10), pageName + " does not exists after invoke attempt in 10 seconds");
 		}
 	}
-	
-	public boolean exists(@Optional int... waitTime){
-		int waitValue=waitTime.length==0?0:waitTime[0];
-		boolean result=false;
+
+	public boolean exists(@Optional int... waitTime) {
+		int waitValue = waitTime.length == 0 ? 0 : waitTime[0];
+		boolean result = false;
 		WebDriverWait wait = new WebDriverWait(Browser.getDriver(), waitValue);
-		try{
-			WebElement item = wait.until(ExpectedConditions.presenceOfElementLocated((By) Reflect.getFieldValueFromField(this, "webPageId", "byId")));
-			result=item!=null;
-		}catch(Exception e){
+		try {
+			WebElement item = wait.until(ExpectedConditions
+					.presenceOfElementLocated((By) Reflect.getFieldValueFromField(this, "webPageId", "byId")));
+			result = item != null;
+		} catch (Exception e) {
 		}
 		Log.info("'" + pageName + "' page existance verification. Exists = " + result);
 		return result;
 	}
-	
 }
  

@@ -14,13 +14,13 @@ public class ListView extends WebItemList{
 		super(itemId);
 	}
 	
-	public ArrayList<String> getText(){
+	public ArrayList<String> getText() {
 		ArrayList<String> out = new ArrayList<String>();
-		for(WebElement item:this.getItems()){
+		for (WebElement item : this.getItems()) {
 			out.add(item.getText());
 		}
-		Log.info("Getting text from the '"+this.locator+"' list view");
-		Log.info("Actual text: "+out);
+		Log.info("Getting text from the '" + this.locator + "' list view");
+		Log.info("Actual text: " + out);
 		return out;
 	}
 

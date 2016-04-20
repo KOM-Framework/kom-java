@@ -25,7 +25,6 @@ public class DropDownList extends WebItem {
 		Browser.waitForJQueryExecution(Global.DEFAULT_AJAX_WAIT);
 	}
 	
-	//function added by weina
 	public void select(int index){
 		Log.info("Selcting index-'"+index+"' in the '"+this.locator+"' drop down list");
 		Select userTypeDropdown = new Select(this.getActiveItem());
@@ -33,12 +32,10 @@ public class DropDownList extends WebItem {
 		Browser.waitForJQueryExecution(Global.DEFAULT_AJAX_WAIT);
 	}
 	
-	//function added by weina
 	public String getSelectedOptionName()
 	{
-		String out = "";
 		Select userTypeDropdown = new Select(this.getActiveItem());
-		out=userTypeDropdown.getFirstSelectedOption().getText();
+		String out=userTypeDropdown.getFirstSelectedOption().getText();
 		Log.info("Getting the selected option of "+this.locator+"' drop down list: "+out+".");
 		return out;
 	}

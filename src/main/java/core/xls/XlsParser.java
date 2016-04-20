@@ -22,13 +22,13 @@ public class XlsParser {
 		File excel = new File(xlsFile);
 		FileInputStream fis = new FileInputStream(excel);
 		hssfWorkbook = new HSSFWorkbook(fis);
-		
+
 		HSSFSheet ws;
-		if(!sheetName.isEmpty())
+		if (!sheetName.isEmpty())
 			ws = hssfWorkbook.getSheet(sheetName);
 		else
-			ws =  hssfWorkbook.getSheetAt(0);
-		
+			ws = hssfWorkbook.getSheetAt(0);
+
 		int rowNum = ws.getLastRowNum() + 1;
 		int colNum = ws.getRow(0).getLastCellNum();
 		for (int i = 0; i < colNum; i++) {
@@ -38,9 +38,9 @@ public class XlsParser {
 			if (columName.equals(value)) {
 				for (int j = 1; j < rowNum; j++) {
 					row = ws.getRow(j);
-					if(cell!=null)
+					if (cell != null)
 						cell.setCellType(1);
-					
+
 					cell = row.getCell(i);
 					DataFormatter df = new DataFormatter();
 					value = df.formatCellValue(cell);
@@ -94,9 +94,9 @@ public class XlsParser {
 		 */
 		return culumsValues;
 	}
-	
+
 	@SuppressWarnings("rawtypes")
-	public static Object[][] getDataProviderFromXLS(String xlsFile, String xlsSheet){
+	public static Object[][] getDataProviderFromXLS(String xlsFile, String xlsSheet) {
 		ArrayList<XLSColumsData> data = null;
 		try {
 			data = XlsParser.getColumsValues(xlsFile, xlsSheet, null);
@@ -105,15 +105,11 @@ public class XlsParser {
 		}
 		int size = data.size();
 		Object[][] returnList = new Object[size][];
-		for(int i=0;i<size;i++){
-			returnList[i]=data.get(i).ListValues.toArray();
-			
+		for (int i = 0; i < size; i++) {
+			returnList[i] = data.get(i).ListValues.toArray();
+
 		}
 		return returnList;
 	}
-	
-	public static void main(String[] args) throws IOException {
-	}
-	
 
 }

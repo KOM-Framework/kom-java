@@ -13,8 +13,8 @@ public class SelectList extends WebItemList {
 	public SelectList(By itemId) {
 		super(itemId);
 	}
-	
-	public void selectOption(String option){
+
+	public void selectOption(String option) {
 		WebDriver driver = Browser.getDriver();
 		Actions action = new Actions(driver);
 		for (WebElement element : getItems()) {

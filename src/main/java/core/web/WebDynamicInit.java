@@ -18,7 +18,7 @@ public abstract class WebDynamicInit {
 	
 	private static void init(Field f) {
 		try {
-			
+
 			Annotation[] annotations = f.getAnnotations();
 			for (Annotation annotation : annotations) {
 				switch (annotation.annotationType().getName()) {
@@ -50,7 +50,7 @@ public abstract class WebDynamicInit {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void initElements(Object obj) {
 		object = obj;
 		cls = obj.getClass();
@@ -64,7 +64,7 @@ public abstract class WebDynamicInit {
 			cls = cls.getSuperclass();
 		} while (!cls.getName().equals("core.web.WebPage") && !cls.getName().equals("core.web.WebDynamicInit"));
 	}
-	
+
 	public WebDynamicInit() {
 		initElements(this);
 	}

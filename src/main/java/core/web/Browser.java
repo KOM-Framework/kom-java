@@ -24,13 +24,15 @@ public class Browser {
 
 	private static Browser browser;
 	private static WebDriver driver;
-	
+
 	public static Browser getBrowser() {
 		return browser;
 	}
+
 	public static void setBrowser(Browser browser) {
 		Browser.browser = browser;
 	}
+
 	public void setDriver(WebDriver driver) {
 		Browser.driver = driver;
 	}
@@ -44,7 +46,7 @@ public class Browser {
 	}
 
 	Browser(String browserType) {
-		Log.info("Creating an instance of a "+browserType+" browser.");
+		Log.info("Creating an instance of a " + browserType + " browser.");
 		switch (browserType) {
 		case Global.CHROME:
 			System.setProperty("webdriver.chrome.driver", Global.CHRONE_DRIVER_PATH);
@@ -52,7 +54,7 @@ public class Browser {
 			break;
 		case Global.INTERNET_EXPLORER:
 			DesiredCapabilities capabilities = new DesiredCapabilities();
-			capabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);      
+			capabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
 			System.setProperty("webdriver.ie.driver", Global.IE_DRIVER_PATH);
 			this.setDriver(new InternetExplorerDriver(capabilities));
 			break;
@@ -71,17 +73,18 @@ public class Browser {
 			break;
 		}
 	}
-	
-	public static boolean textExists(By by, int seconds){
-		Log.info("'"+by.toString()+"' text existance verification");
-		WebElement textItem = (new WebDriverWait(getDriver(), seconds)).until(ExpectedConditions.presenceOfElementLocated(by));
-		return textItem!=null;
+
+	public static boolean textExists(By by, int seconds) {
+		Log.info("'" + by.toString() + "' text existance verification");
+		WebElement textItem = (new WebDriverWait(getDriver(), seconds))
+				.until(ExpectedConditions.presenceOfElementLocated(by));
+		return textItem != null;
 	}
-	
-	public static boolean textExists(String text, int seconds){
+
+	public static boolean textExists(String text, int seconds) {
 		return textExists(By.xpath("//*[contains(text(),'" + text + "')]"), seconds);
 	}
-	
+
 	public static void waitForJQueryExecution(int time) {
 		(new WebDriverWait(getDriver(), time)).until(new ExpectedCondition<Boolean>() {
 			public Boolean apply(WebDriver d) {
@@ -92,27 +95,27 @@ public class Browser {
 		Browser.sleep(100);
 	}
 
-	public  static void sleep(int time){
+	public static void sleep(int time) {
 		try {
 			Thread.sleep(time);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
-	private void setDownloadWithoutAskConfirmationForfirefox(FirefoxProfile profile){
+
+	private void setDownloadWithoutAskConfirmationForfirefox(FirefoxProfile profile) {
 		profile.setPreference("browser.download.folderList", 2);
 		profile.setPreference("browser.download.manager.showWhenStarting", false);
 		profile.setPreference("browser.download.dir", "C:\\Download\\");
 		profile.setPreference("browser.helperApps.neverAsk.openFile",
-		"text/csv,application/x-msexcel,application/excel,application/x-excel,application/vnd.ms-excel,image/png,image/jpeg,text/html,text/plain,application/msword,application/xml,application/zip, application/octet-stream");
+				"text/csv,application/x-msexcel,application/excel,application/x-excel,application/vnd.ms-excel,image/png,image/jpeg,text/html,text/plain,application/msword,application/xml,application/zip, application/octet-stream");
 		profile.setPreference("browser.helperApps.neverAsk.saveToDisk",
-		"text/csv,application/x-msexcel,application/excel,application/x-excel,application/vnd.ms-excel,image/png,image/jpeg,text/html,text/plain,application/msword,application/xml,application/zip, application/octet-stream");
+				"text/csv,application/x-msexcel,application/excel,application/x-excel,application/vnd.ms-excel,image/png,image/jpeg,text/html,text/plain,application/msword,application/xml,application/zip, application/octet-stream");
 		profile.setPreference("browser.helperApps.alwaysAsk.force", false);
 		profile.setPreference("browser.download.manager.alertOnEXEOpen", false);
 		profile.setPreference("browser.download.manager.focusWhenStarting", false);
 		profile.setPreference("browser.download.manager.useWindow", false);
 		profile.setPreference("browser.download.manager.showAlertOnComplete", false);
 		profile.setPreference("browser.download.manager.closeWhenDone", false);
-		}
-	
+	}
 }

@@ -28,13 +28,13 @@ import com.sun.jersey.api.client.UniformInterfaceException;
 public class HTTP {
 
 	private final static String USER_AGENT = "Mozilla/5.0";
-	
-	public static ArrayList<String> outResults= new ArrayList<String>();
+
+	public static ArrayList<String> outResults = new ArrayList<String>();
 
 	public static String sendGet(String url, String request) throws Exception {
-		String fullURL=url+"?"+request;
+		String fullURL = url + "?" + request;
 		System.out.println(fullURL);
-		HttpURLConnection con = (HttpURLConnection)  new URL(fullURL).openConnection();
+		HttpURLConnection con = (HttpURLConnection) new URL(fullURL).openConnection();
 		con.setRequestMethod("GET");
 		con.setRequestProperty("User-Agent", USER_AGENT);
 		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
@@ -45,16 +45,17 @@ public class HTTP {
 		}
 		in.close();
 		return response.toString();
-	}
-	;
-	public static String sendPost(String url, String request, boolean isEncode, int connectTimeOut, int readTimeOut) throws Exception{
+	};
+
+	public static String sendPost(String url, String request, boolean isEncode, int connectTimeOut, int readTimeOut)
+			throws Exception {
 		DataOutputStream wr;
 		String resp = "";
 		HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
 
 		con.setRequestMethod("POST");
-		if(isEncode)
-			con.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
+		if (isEncode)
+			con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 		con.setRequestProperty("Content-Language", "en-US");
 
 		con.setConnectTimeout(connectTimeOut);
@@ -81,9 +82,10 @@ public class HTTP {
 		resp = response.toString();
 		return resp;
 	}
-	
-	public static ArrayList<String> sendTransactions(final String url, final String request, int numberOfTransactions, int threadsNumber, final String regExtToParseResponds) throws Exception {
-		final int transactionToSendInThread=numberOfTransactions/threadsNumber;
+
+	public static ArrayList<String> sendTransactions(final String url, final String request, int numberOfTransactions,
+			int threadsNumber, final String regExtToParseResponds) throws Exception {
+		final int transactionToSendInThread = numberOfTransactions / threadsNumber;
 		ExecutorService es = Executors.newCachedThreadPool();
 		for (int i = 1; i <= threadsNumber; i++) {
 			es.execute(new Runnable() {
@@ -91,7 +93,7 @@ public class HTTP {
 				public void run() {
 					for (int i = 0; i < transactionToSendInThread; i++) {
 						try {
-							String respond = HTTP.sendGet(url,request);
+							String respond = HTTP.sendGet(url, request);
 							System.out.println(respond);
 							Pattern pattern = Pattern.compile(regExtToParseResponds);
 							Matcher matcher = pattern.matcher(respond);
@@ -110,10 +112,10 @@ public class HTTP {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return outResults;
 	}
-	
+
 	public static String sendPostJSONRequest(String url, String request) throws Exception {
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -137,7 +139,7 @@ public class HTTP {
 		String indented = mapper.writeValueAsString(json);
 		return indented;
 	}
-	
+
 	public static JSONObject sendGetRESTJSONRequest(String url, String authentication) {
 		try {
 			ClientResponse response;
@@ -166,9 +168,8 @@ public class HTTP {
 			return null;
 		}
 	}
-	
-	
-	//not finished
+
+	// not finished
 	public static boolean sendPutRESTJSONRequest(String url, String authentication, JSONObject putObject) {
 		boolean isFinished = true;
 		try {
@@ -178,24 +179,24 @@ public class HTTP {
 
 			if (!authentication.isEmpty())
 				response = webResource.header("Authorization", "Basic " + new String(Base64.encode(authentication)))
-						.type("application/json").accept("application/json").put(ClientResponse.class, putObject.toString());
+						.type("application/json").accept("application/json")
+						.put(ClientResponse.class, putObject.toString());
 			else
-				response = webResource.type("application/json").accept("application/json").put(ClientResponse.class, putObject.toString());
+				response = webResource.type("application/json").accept("application/json").put(ClientResponse.class,
+						putObject.toString());
 
 			if (response.getStatus() != 200) {
 				Log.info("Exceprtion happens when sending REST request: " + url + ".");
-				isFinished=false;
+				isFinished = false;
 			}
 
-			
 		} catch (ClientHandlerException | UniformInterfaceException e) {
 			// TODO Auto-generated catch block
 			Log.info("Exceprtion happens when sending REST request: " + url + ".");
-			isFinished=false;
+			isFinished = false;
 		}
-		
+
 		return isFinished;
 	}
-	//not finished
+	// not finished
 }
-
