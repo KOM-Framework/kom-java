@@ -1,5 +1,5 @@
 apply plugin: 'java'
-apply plugin: 'eclipse'
+apply plugin: 'idea'
 
 sourceCompatibility = 1.8
 version = '1.0'
@@ -13,12 +13,12 @@ jar {
 sourceSets {
     main {
         java {
-            //srcDir 'src'
+            srcDir 'src'
         }
     }
     test {
         java {
-            srcDir 'src'
+            //srcDir 'src'
         }
     }
 }
@@ -58,15 +58,7 @@ task customizeWebReport(type:JavaExec) {
 
 test {
 	outputs.upToDateWhen { false }
-    classpath = files("./src/main/resources",
-    				  "config",
-    				  "lib",
-                      project.sourceSets.main.compileClasspath,
-                      project.sourceSets.test.compileClasspath,
-                      project.sourceSets.main.runtimeClasspath,
-                      project.sourceSets.test.runtimeClasspath
-                      )
-	reports{
+   	reports{
 		html.enabled=true
 		html.destination "build/reports"
 	}
