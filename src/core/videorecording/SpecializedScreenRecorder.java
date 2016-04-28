@@ -1,4 +1,4 @@
-package src.core.videorecording;
+package core.videorecording;
 
 import java.awt.AWTException;
 import java.awt.GraphicsConfiguration;
