@@ -1,13 +1,13 @@
 package core;
 
+
 import java.io.File;
 import org.apache.tools.ant.util.FileUtils;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
-import core.videorecording.VideoRecorder;
 import core.web.Browser;
-
+import core.videorecording.VideoRecorder;
 
 public class WebTestListener implements ITestListener {
 
