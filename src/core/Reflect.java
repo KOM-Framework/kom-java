@@ -4,6 +4,17 @@ import java.lang.reflect.InvocationTargetException;
 
 public class Reflect {
 
+	public static Object getField(Object object, String fieldName){
+		Object obj = null;
+		try {
+			obj = object.getClass().getField(fieldName);
+		} catch (IllegalArgumentException | NoSuchFieldException | SecurityException
+				 e) {
+			e.printStackTrace();
+		}
+		return obj;
+	}
+
 	public static Object invokeMethodFromField(Object object, String fieldName, String methodName, Object... args) {
 		Object obj = null;
 		try {
@@ -13,7 +24,7 @@ public class Reflect {
 				| InvocationTargetException | NoSuchMethodException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return obj;
 	}
 
 	public static Object invokeMethod(Object object, String methodName, Object... args) {

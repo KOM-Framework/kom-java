@@ -34,7 +34,7 @@ public class GridView extends WebItemList{
 						Object fieldsObject = f.get(item);
 						String fieldsLocator = (String) Reflect.getFieldValue(fieldsObject, "locator");
 						String xpath = this.locator + "[" + i + "]" + fieldsLocator;
-						Field byIDField = (Field) Reflect.getFieldValue(fieldsObject, "byId");
+						Field byIDField = (Field) Reflect.getField(fieldsObject, "byId");
 						byIDField.set(fieldsObject, By.xpath(xpath));
 						f.set(item, fieldsObject);
 					} catch (IllegalArgumentException | IllegalAccessException | SecurityException e) {
