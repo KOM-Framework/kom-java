@@ -1,0 +1,82 @@
+apply plugin: 'java'
+
+version = '1.0'
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Gradle Quickstart',
+                   'Implementation-Version': version
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main/java'
+            srcDir '../src/pageobjects'
+        }
+    }
+    test {
+        java {
+            srcDir '../src/tests/e2e'
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven { url "https://maven.atlassian.com/repository/public"}
+    maven { url "http://repo.jenkins-ci.org/public/"}
+}
+
+configurations {
+    agent
+}
+
+dependencies {
+    compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
+    compile 'org.seleniumhq.selenium:selenium-java:3.0.1'
+    compile 'org.testng:testng:6.10'
+    compile 'org.apache.poi:poi:3.13'
+    compile 'commons-beanutils:commons-beanutils:1.9.2'
+    compile 'org.apache.commons:commons-lang3:3.4'
+    compile 'javax.mail:mail:1.4.7'
+    compile 'log4j:log4j:1.2.17'
+    compile 'org.apache.velocity:velocity:1.7'
+    compile 'com.google.inject:guice:4.0'
+    compile 'org.uncommons:reportng:1.1.4'
+    compile 'commons-io:commons-io:2.4'
+    compile 'org.codehaus.jackson:jackson-core-asl:1.9.13'
+    compile 'org.apache.httpcomponents:httpcore:4.4.4'
+    compile 'com.atlassian.jira:jira-rest-java-client:2.0.0-m2'
+    compile 'com.sun.jersey:jersey-client:1.19'
+    compile 'com.google.code.gson:gson:2.6.1'
+    compile files('lib/sqljdbc4.jar')
+    compile 'org.imaginea.jenkins.plugins:testInProgress-testng-client:0.1'
+    compile group: 'com.github.azakordonets', name: 'fabricator_2.11', version: '2.1.2'
+    compile group: 'ru.yandex.qatools.allure', name: 'allure-testng-adaptor', version: '1.5.0'
+    agent "org.aspectj:aspectjweaver:1.8.10"
+    compile group: 'org.beanshell', name: 'bsh', version: '2.0b5'
+}
+
+test.doFirst {
+    jvmArgs "-javaagent:${configurations.agent.singleFile}"
+}
+
+test {
+	outputs.upToDateWhen { false }
+    classpath = files("config",
+    				  "lib",
+                      project.sourceSets.main.compileClasspath,
+                      project.sourceSets.test.compileClasspath,
+                      project.sourceSets.main.runtimeClasspath,
+                      project.sourceSets.test.runtimeClasspath
+                      )
+    useTestNG() {
+    	useDefaultListeners = true
+        suites System.getenv('XML_TEST_PLAN')!=null?System.getenv('XML_TEST_PLAN'):"src/main/java/core/TestNG.xml"
+    }
+    
+}
+
+

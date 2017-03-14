@@ -1,0 +1,16 @@
+seleniumhub:
+ image: selenium/hub
+ ports:
+ - "5555:4444"
+ environment:
+   GRID_TIMEOUT: 900000
+   GRID_UNREGISTER_IF_STILL_DOWN_AFTER: 600000
+   GRID_BROWSER_TIMEOUT: 900000
+chromenode:
+ image: selenium/node-chrome-debug
+ volumes:
+     - /dev/shm:/dev/shm
+ ports:
+ - "5900"
+ links:
+ - seleniumhub:hub
