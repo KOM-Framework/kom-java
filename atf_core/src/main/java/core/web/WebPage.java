@@ -21,8 +21,8 @@ public abstract class WebPage extends WebDynamicInit {
 	protected abstract void invokeActions() throws Exception;
 
 	public WebPage(String... invokeArgs) {
-		this.invokeArgs = new ArrayList<String>(Arrays.asList(invokeArgs));
-		initElements(this);
+	    super();
+		this.invokeArgs = new ArrayList<>(Arrays.asList(invokeArgs));
 	}
 
 	public final void invoke() throws Exception {

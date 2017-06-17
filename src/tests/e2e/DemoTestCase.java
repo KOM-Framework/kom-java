@@ -14,12 +14,11 @@ import ru.yandex.qatools.allure.annotations.*;
 @Listeners({WebTestListener.class})
 public class DemoTestCase {
 
-    private static DemoDeclaration page;
+    private static DemoDeclaration searchPage = new DemoDeclaration();
 
     @BeforeMethod(alwaysRun = true)
     public static void beforeMethod() throws Exception {
-        page = new DemoDeclaration();
-        page.invoke();
+        searchPage.invoke();
     }
 
     @Test(groups = TestGroup.acceptance)
@@ -30,8 +29,8 @@ public class DemoTestCase {
     public static void testGooglePage(@Parameter("Search pattern") @Optional("Selenium") String searchPattern, @Parameter("Expected Result") @Optional("Selenium Users - Google Groups") String expectedResult) throws Exception {
         SearchResultStructure result = null;
         try{
-            page.search(searchPattern);
-            result = page.searchForResult(expectedResult);
+            searchPage.search(searchPattern);
+            result = searchPage.searchForResult(expectedResult);
             Assert.assertNotNull(result,"Unable to find expected item in the Search results");
         }
         finally {

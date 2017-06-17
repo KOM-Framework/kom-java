@@ -14,5 +14,4 @@ public class SearchResultStructure extends WebDynamicInit {
     @FindBy(xpath="//*[@class='_Rm']")
     public WebItem url;
 
-
 }

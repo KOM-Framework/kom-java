@@ -13,7 +13,7 @@ sourceSets {
     main {
         java {
             srcDir 'src/main/java'
-            srcDir '../src/pageobjects'
+            srcDir '../src/main'
         }
     }
     test {
