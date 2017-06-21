@@ -41,6 +41,6 @@ public class DemoDeclaration extends WebPage{
 
     @Step("Search for {0} in google results")
     public SearchResultStructure searchForResult(String result) throws NoSuchMethodException, NoSuchFieldException, IllegalAccessException, InvocationTargetException {
-        return this.searchResults.getItem(result,"mainText", 5);
+        return this.searchResults.getItem(result,"mainText");
     }
 }

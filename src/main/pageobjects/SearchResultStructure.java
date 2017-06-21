@@ -9,9 +9,9 @@ import org.openqa.selenium.support.FindBy;
  */
 public class SearchResultStructure extends WebDynamicInit {
 
-    @FindBy(xpath="//*[@class='r']/a") //This XPATH should be dependent on GridView xpath
+    @FindBy(xpath=".//*[@class='r']/a") //This XPATH should be dependent on GridView xpath
     public WebItem mainText;
-    @FindBy(xpath="//*[@class='_Rm']")
+    @FindBy(xpath=".//*[@class='_Rm']")
     public WebItem url;
 
 }

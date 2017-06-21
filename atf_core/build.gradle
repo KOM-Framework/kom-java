@@ -35,8 +35,8 @@ configurations {
 
 dependencies {
     compile group: 'commons-collections', name: 'commons-collections', version: '3.0'
-    compile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '3.0.0'
-    compile group: 'org.testng', name: 'testng', version: '6.11'
+    compile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: 'latest.integration'
+    compile group: 'org.testng', name: 'testng', version: 'latest.integration'
     compile 'org.apache.poi:poi:3.13'
     compile 'commons-beanutils:commons-beanutils:1.9.2'
     compile 'org.apache.commons:commons-lang3:3.4'
@@ -52,9 +52,8 @@ dependencies {
     compile 'com.sun.jersey:jersey-client:1.19'
     compile 'com.google.code.gson:gson:2.6.1'
     compile files('lib/sqljdbc4.jar')
-    compile 'org.imaginea.jenkins.plugins:testInProgress-testng-client:0.1'
     compile group: 'com.github.azakordonets', name: 'fabricator_2.11', version: '2.1.2'
-    compile group: 'ru.yandex.qatools.allure', name: 'allure-testng-adaptor', version: '1.5.2'
+    compile group: 'ru.yandex.qatools.allure', name: 'allure-testng-adaptor', version: 'latest.integration'
     agent "org.aspectj:aspectjweaver:1.8.10"
     compile group: 'org.beanshell', name: 'bsh', version: '2.0b5'
     compile group: 'io.github.bonigarcia', name: 'webdrivermanager', version: '1.6.2'

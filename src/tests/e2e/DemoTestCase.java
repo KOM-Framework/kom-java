@@ -26,7 +26,7 @@ public class DemoTestCase {
     @Description("This is a demo test description")
     @Stories(Story.functional)
     @Parameters({"searchPattern", "expectedResult"})
-    public static void testGooglePage(@Parameter("Search pattern") @Optional("Selenium") String searchPattern, @Parameter("Expected Result") @Optional("Selenium Users - Google Groups") String expectedResult) throws Exception {
+    public static void testGooglePage(@Parameter("Search pattern") @Optional("Selenium") String searchPattern, @Parameter("Expected Result") @Optional("selenium-webdriver - npm") String expectedResult) throws Exception {
         SearchResultStructure result = null;
         try{
             searchPage.search(searchPattern);
