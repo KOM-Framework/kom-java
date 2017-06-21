@@ -3,6 +3,7 @@ package core.web;
 import core.Global;
 import core.Log;
 import core.Reflect;
+import core.datatypes.GridView;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -16,10 +17,25 @@ public class WebItem implements WebElement{
 
 	public By byId;
 	private WebElement element;
+    private GridView baseList;
+    private Integer indexInBaseList;
 
-	private WebElement getItem(int seconds, ExpectedCondition<WebElement> condition) {
+    public void setBaseList(GridView element){
+        this.baseList = element;
+    }
+
+    public void setIndexInBaseList(Integer index) {
+        this.indexInBaseList = index;
+    }
+
+    private WebElement getItem(int seconds, ExpectedCondition<WebElement> condition) {
 		WebDriverWait wait = new WebDriverWait(Browser.getDriver(), seconds);
-        element = wait.until(condition);
+		if (baseList!=null){
+            List<WebElement> elements = this.baseList.getWebElements(0);
+            element = wait.until(ExpectedConditions.presenceOfNestedElementLocatedBy(elements.get(this.indexInBaseList), byId));
+        }else{
+            element = wait.until(condition);
+        }
 		return element;
 	}
 
@@ -218,7 +234,7 @@ public class WebItem implements WebElement{
 		boolean result = false;
         WebDriverWait wait = new WebDriverWait(Browser.getDriver(), waitValue);
 		try {
-            result = wait.until(ExpectedConditions.invisibilityOfElementLocated(byId));
+            result = wait.until((ExpectedCondition<Boolean>) d -> !getPassiveItem().isDisplayed());
 		} catch (Exception ignored) {
 		}
 		Log.info("'" + byId.toString() + "' invisibility verification. Invisible = " + result);
@@ -227,22 +243,13 @@ public class WebItem implements WebElement{
 
 	public boolean isVisible(int... waitTime) {
         int waitValue = waitTime.length == 0 ? 0 : waitTime[0];
+		WebDriverWait wait = new WebDriverWait(Browser.getDriver(), waitValue);
 		boolean result = false;
 		try {
-			result = this.getItem(waitValue, ExpectedConditions.visibilityOfElementLocated(byId)) != null;
-		}catch (Exception ignored){}
+			result = wait.until((ExpectedCondition<Boolean>) d -> getPassiveItem().isDisplayed());
+		} catch (Exception ignored) {
+		}
 		Log.info("'" + byId.toString() + "' visibility verification. Visible = " + result);
 		return result;
 	}
-
-	public boolean waitForElementToBeEnabled(int... waitTime){
-        int waitValue = waitTime.length == 0 ? 0 : waitTime[0];
-		boolean result = false;
-		try {
-			result = this.getItem(waitValue, ExpectedConditions.elementToBeClickable(byId)) != null;
-		}catch (Exception ignored){}
-        Log.info(String.format("Waiting for the %s element to be Enabled. Enabled = %s", this.byId.toString(), result));
-        return result;
-    }
-
 }

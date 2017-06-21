@@ -1,9 +1,7 @@
 package core.web;
 
 import core.Log;
-import org.apache.poi.util.SystemOutLogger;
 import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -21,10 +19,14 @@ public class WebItemList {
         byId=itemId;
     }
 
+    protected List<WebElement> getWebElements(int waitTime){
+        WebDriverWait wait = new WebDriverWait(Browser.getDriver(), waitTime);
+        return wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(byId));
+    }
+
     public List<WebItem> getItems(int... waitTime) {
         int waitValue = waitTime.length == 0 ? DEFAULT_EXPLICIT_WAIT : waitTime[0];
-        WebDriverWait wait = new WebDriverWait(Browser.getDriver(), waitValue);
-        List<WebElement> webList= wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(byId));
+        List<WebElement> webList= this.getWebElements(waitValue);
         ArrayList<WebItem> outList = new ArrayList<>();
         int size = webList.size();
         for(int i=1;i<=size;i++){

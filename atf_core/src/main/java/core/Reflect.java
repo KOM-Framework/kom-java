@@ -28,6 +28,7 @@ public class Reflect {
             for(int i=0; i<args.length; i++){
                 argClasses[i]=args[i].getClass();
             }
+
             method = object.getClass().getMethod(methodName, argClasses);
         }else{
             method = object.getClass().getMethod(methodName);

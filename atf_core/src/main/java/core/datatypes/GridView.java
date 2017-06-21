@@ -37,7 +37,7 @@ public class GridView extends WebItemList {
         Field[] fields = this.structure.getClass().getDeclaredFields();
         if (this.exists(DEFAULT_EXPLICIT_WAIT)){
             int size = this.getSize();
-            for (int i = 1; i <= size; i++) {
+            for (int i = 0; i < size; i++) {
                 Object item = null;
                 try {
                     item = this.structure.getClass().newInstance();
@@ -48,18 +48,15 @@ public class GridView extends WebItemList {
                     if (f.getModifiers() == 1) {
                         try {
                             Object fieldsObject = f.get(item);
-                            String fieldsLocator = null;
-                            fieldsLocator = Reflect.invokeMethod(fieldsObject, "getLocator").toString();
-                            String xpath = this.getLocator() + "[" + i + "]" + fieldsLocator;
-                            Field byIDField = fieldsObject.getClass().getField("byId");
-                            byIDField.set(fieldsObject, By.xpath(xpath));
+                            Reflect.invokeMethod(fieldsObject, "setBaseList", this);
+                            Reflect.invokeMethod(fieldsObject, "setIndexInBaseList", i);
                             f.set(item, fieldsObject);
                         } catch (IllegalArgumentException | IllegalAccessException | SecurityException e) {
                             e.printStackTrace();
                         }
                     }
                 }
-                elementsList.add(i - 1, (C) item);
+                elementsList.add((C) item);
             }
         }
         return elementsList;
@@ -71,7 +68,10 @@ public class GridView extends WebItemList {
     public <C> C getItem(String itemName, String fieldBy) throws NoSuchMethodException, InvocationTargetException, NoSuchFieldException, IllegalAccessException {
         Log.info("Trying to find an '" + itemName + "' item in '" + this.byId.toString()+ "' grid view");
         C foundItem = null;
-        this.switchToTheFirstPage();
+        if (pager != null) {
+            this.switchToTheFirstPage();
+        }
+
         boolean process = true;
         do {
             ArrayList<C> itemList = this.getItems();
@@ -86,7 +86,11 @@ public class GridView extends WebItemList {
                     break;
                 }
             }
-            if (foundItem != null || !this.switchToTheNextPage()) {
+            if (foundItem != null) {
+                process = false;
+            } else if (pager != null && this.switchToTheNextPage()) {
+                Log.info("Switching to the next page");
+            } else {
                 process = false;
             }
         } while (process);
@@ -97,9 +101,12 @@ public class GridView extends WebItemList {
     public <C> C getItem(int index) throws NoSuchMethodException, InvocationTargetException, NoSuchFieldException, IllegalAccessException {
         Log.info("Trying to get an item by index " + index + "in '" + this.byId.toString() + "' grid view");
         C foundItem = null;
-        this.switchToTheFirstPage();
+        if (this.pager != null) {
+            this.switchToTheFirstPage();
+        }
         ArrayList<C> itemList = this.getItems();
         int size = itemList.size();
+
         if (index >= 0 && index < size) {
             foundItem = itemList.get(index);
         }
@@ -124,7 +131,9 @@ public class GridView extends WebItemList {
     public <C> ArrayList<String> getAllItemNames(String fieldBy) throws NoSuchMethodException, InvocationTargetException, NoSuchFieldException, IllegalAccessException {
         Log.info("Getting item names from the '" + this.byId.toString() + "' grid view");
         ArrayList<String> outList = new ArrayList<>();
-        this.switchToTheFirstPage();
+        if (pager != null) {
+            this.switchToTheFirstPage();
+        }
         boolean process = true;
         do {
             Browser.sleep(200);
@@ -138,7 +147,9 @@ public class GridView extends WebItemList {
                 outList.add(fieldValue);
             }
             if (process){
-                if (!this.switchToTheNextPage()) {
+                if (pager != null && this.switchToTheNextPage()) {
+                    Log.info("Switching to the next page");
+                } else {
                     process = false;
                 }
             }
@@ -150,31 +161,28 @@ public class GridView extends WebItemList {
     public int getListLength() throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException {
         Log.info("Trying to find list length in '" + this.byId.toString() + "' grid view");
         int outCount = 0;
-        this.switchToTheFirstPage();
+        if (this.pager != null)
+            this.switchToTheFirstPage();
         do{
             outCount += this.getSize();
-        }while (this.switchToTheNextPage());
+            Log.info("Switching to the next page");
+        }while (pager != null && this.switchToTheNextPage());
         return outCount;
     }
 
     private boolean switchToTheNextPage() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, NoSuchFieldException {
-        if (this.pager != null && this.pager.exists(0)) {
-            String currentElementId = this.getListElement(0).getElementId();
-            boolean out = pager.nextPage();
-            if (out) {
-                this.waitForRefreshed(currentElementId, DEFAULT_AJAX_WAIT);
-            }
-            return out;
+        String currentElementId = this.getListElement(0).getElementId();
+        boolean out = pager.nextPage();
+        if (out){
+            this.waitForRefreshed(currentElementId, DEFAULT_AJAX_WAIT);
         }
-        return false;
+        return out;
     }
 
     private void switchToTheFirstPage() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, NoSuchFieldException {
-        if (this.pager != null && this.pager.exists(0)) {
-            String currentElementId = this.getListElement(0).getElementId();
-            if (!this.pager.firstPage()) {
-                this.waitForRefreshed(currentElementId, DEFAULT_AJAX_WAIT);
-            }
+        String currentElementId = this.getListElement(0).getElementId();
+        if (!this.pager.firstPage()){
+            this.waitForRefreshed(currentElementId, DEFAULT_AJAX_WAIT);
         }
     }
 
