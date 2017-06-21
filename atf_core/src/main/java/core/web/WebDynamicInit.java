@@ -1,6 +1,6 @@
 package core.web;
 
-import core.Custom;
+import core.utility.General;
 import core.datatypes.Pager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.pagefactory.Annotations;
@@ -9,7 +9,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 public abstract class WebDynamicInit {
@@ -22,8 +21,8 @@ public abstract class WebDynamicInit {
 			switch (annotationName) {
 			case "FindBy":
 				Object id = new Annotations(f).buildBy();
-				Constructor<?>[] constr = f.getType().getConstructors();
-				for (Constructor<?> constructor : constr) {
+				Constructor<?>[] constructors = f.getType().getConstructors();
+				for (Constructor<?> constructor : constructors) {
 					if (constructor.getParameterCount() == 1) {
 						f.set(object, constructor.newInstance(id));
 						break;
@@ -32,9 +31,9 @@ public abstract class WebDynamicInit {
 				break;
 			case "FindBys":
 				id = new Annotations(f).buildBy();
-				constr = f.getType().getConstructors();
-				for (Constructor<?> constructor : constr) {
-					ArrayList<By> byList = Custom.byChainedToByList(id);
+                constructors = f.getType().getConstructors();
+				for (Constructor<?> constructor : constructors) {
+					ArrayList<By> byList = General.byChainedToByList(id);
 					if (constructor.getParameterCount() == byList.size()) {
 						f.set(object, constructor.newInstance(byList.toArray()));
 						break;
@@ -49,8 +48,8 @@ public abstract class WebDynamicInit {
 					String xpathPager = String.valueOf(type.getMethod("pagerXpath").invoke(annotation, (Object[])null));
 					String currentPageXpath = String.valueOf(type.getMethod("currentPageXpath").invoke(annotation, (Object[])null));
                     Pager.PagerType pagerType = (Pager.PagerType) type.getMethod("pagerType").invoke(annotation, (Object[])null);
-					constr = f.getType().getConstructors();
-					for (Constructor<?> constructor : constr) {
+                    constructors = f.getType().getConstructors();
+					for (Constructor<?> constructor : constructors) {
 						if (constructor.getParameterCount() == 2 && xpathPager.equals("")) {
 							f.set(object, constructor.newInstance(xpathValue, structureValue));
 							break;

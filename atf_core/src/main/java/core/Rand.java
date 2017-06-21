@@ -244,5 +244,15 @@ public class Rand {
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 		return String.valueOf(timestamp.getTime());
 	}
-	
+
+	public static String timestamp(int length) {
+		String value=timestamp();
+		if (value.length()>length){
+			value = value.substring((value.length()-length));
+		}
+		return value;
+	}
+
+    public short getRandomScore(int from, int to) {        return (short)Rand.getRandomNumber(from, to);    }
+
 }

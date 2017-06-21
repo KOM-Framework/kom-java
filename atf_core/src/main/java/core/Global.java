@@ -1,5 +1,7 @@
 package core;
 
+import core.xml.Reader;
+
 public class Global {
 
 	public static final String WORKSPACE_LOCATION = System.getProperty("user.dir");
@@ -11,16 +13,10 @@ public class Global {
 	public static final String SAFARI = "Safari";
 	public static final String INTERNET_EXPLORER = "IntenetExplorer";
 	
-	// Drivers
-	public static final String IE_DRIVER_PATH = "src/main/resources/drivers/IEDriverServer_x32.exe";
-	public static final String CHROME_DRIVER_PATH = "src/main/resources/drivers/chromedriver.exe";
-	public static final String FIREFOX_DRIVER_PATH = "src/main/resources/drivers/geckodriver.exe";
-	public static final String OPERA_DRIVER_PATH = "src/main/resources/drivers/Drivers/operadriver.exe";
-	
 	//Configurations
-	public static final String BROWSER = System.getenv("WEB_BROWSER")!=null?System.getenv("WEB_BROWSER"):CHROME;
+	public static final String BROWSER = Reader.readParam("GBL_WEB_BROWSER")!=null?Reader.readParam("GBL_WEB_BROWSER"):CHROME;
 	public static final boolean REMOTE_EXECUTION = System.getenv("REMOTE_EXECUTION") != null && Boolean.parseBoolean(System.getenv("REMOTE_EXECUTION"));
-	public static final String SELENIUM_HUB = "http://10.0.9.80:5555/wd/hub";
+	public static final String SELENIUM_HUB = "http://10.0.0.237:5555/wd/hub";
 
 	// Alphabetic | Numbers
 	public static final String ENGLISH_ALPHABET = "abcdefghijklmnopqrstuvwxyz";
@@ -33,7 +29,7 @@ public class Global {
 	public static final String LOCAL_SMTP_SERVER = "10.0.0.25";
 	
 	//Timers
-	public static final int DEFAULT_EXPLICIT_WAIT = 2;
+	public static final int DEFAULT_EXPLICIT_WAIT = 5;
 	public static final int DEFAULT_IMPLICIT_WAIT = 30;
 	public static final int DEFAULT_AJAX_WAIT = 10;
 	public static final int DEFAULT_PAGE_LOAD_TIME = 60;
@@ -44,7 +40,7 @@ public class Global {
 	public static final String REPORT_HTML_CLASSES_LOCATION = "build/reports/classes";
 	
 	//DataProviderPath
-	public static final String DATA_PROVIDER_PATH="src/main/resources/dataproviderfile/";
+	public static final String DATA_PROVIDER_PATH="../src/main/resources/dataproviderfile/";
 	public static final String DATA_JSON_EXTENSION=".json";
 	public static final String DATA_PROVIDER_CLASS_TAG="org.testng.annotations.DataProvider";
 	

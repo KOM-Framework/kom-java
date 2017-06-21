@@ -17,9 +17,9 @@ public class CheckBoxList extends WebItemList {
 		super(checkBox);
 	}
 	
-	public CheckBoxList(By checkBoxId,By lableId) {
+	public CheckBoxList(By checkBoxId,By labelId) {
 		super(checkBoxId);
-		this.labels =new WebItemList(lableId);
+		this.labels =new WebItemList(labelId);
 	}
 	
 	public ArrayList<String> getText(){

@@ -14,17 +14,14 @@ public class Button extends WebItem{
 		super(byID);
 	}
 	
-	public boolean isClickable(int seconds){
+	public boolean isClickable(int... waitTime){
 		try{
-			WebDriverWait wait = new WebDriverWait(Browser.getDriver(), seconds);
+			int waitValue = waitTime.length == 0 ? 0 : waitTime[0];
+			WebDriverWait wait = new WebDriverWait(Browser.getDriver(), waitValue);
 			WebElement element = wait.until(ExpectedConditions.elementToBeClickable(this));
-			if (!"none".equals(element.getCssValue("pointer-events")))
-				return true;
-			else 
-				return false;
+			return true;
 		}
-		catch (WebDriverException e){
-			return false;
-		}
+		catch (WebDriverException ignored){}
+		return false;
 	}
 }

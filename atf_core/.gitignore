@@ -36,3 +36,4 @@ _ReSharper*/
 out/
 build/
 target/allure-results/
+TestNG.xml

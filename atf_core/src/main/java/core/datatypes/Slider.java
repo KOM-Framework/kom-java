@@ -6,7 +6,7 @@ import org.openqa.selenium.By;
 
 public class Slider extends WebItem {
 
-	WebItem sliderInput;
+	private WebItem sliderInput;
 
 	public Slider(By byID, By byIDInput) {
 		super(byID);

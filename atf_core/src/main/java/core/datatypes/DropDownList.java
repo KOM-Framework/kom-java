@@ -24,11 +24,26 @@ public class DropDownList extends WebItem {
 		userTypeDropdown.selectByVisibleText(visibleText);
 		Browser.waitForJQueryExecution(Global.DEFAULT_AJAX_WAIT);
 	}
-	
+
+	public void selectDynamicText(String text) {
+		Log.info("Selecting value -'"+text+"' in the '"+this.byId.toString()+"' drop down list");
+		String valueXpath = this.getLocator()+"//*[contains(text(),'"+text+"')]";
+		WebItem optionValue = new WebItem(By.xpath(valueXpath));
+		optionValue.waitForElementToAppear(2);
+		this.select(text);
+	}
+
 	public void select(int index){
 		Log.info("Selecting index-'"+index+"' in the '"+this.byId.toString()+"' drop down list");
 		Select userTypeDropdown = new Select(this.getActiveItem());
 		userTypeDropdown.selectByIndex(index);
+		Browser.waitForJQueryExecution(Global.DEFAULT_AJAX_WAIT);
+	}
+
+	public void selectByValue(String value){
+		Log.info("Selecting value -'"+value+"' in the '"+this.byId.toString()+"' drop down list");
+		Select userTypeDropdown = new Select(this.getActiveItem());
+		userTypeDropdown.selectByValue(value);
 		Browser.waitForJQueryExecution(Global.DEFAULT_AJAX_WAIT);
 	}
 	

@@ -31,6 +31,7 @@ public class TextField extends WebItem {
 		Log.info("Clearing and sending '"+keys+"' keys to the '"+this.byId.toString()+"' text field");
 		WebElement element = getActiveItem();
 		element.clear();
+        Browser.waitForJQueryExecution(Global.DEFAULT_AJAX_WAIT);
 		element.sendKeys(keys);
 	}
 

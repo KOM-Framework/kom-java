@@ -7,7 +7,7 @@ seleniumhub:
    GRID_UNREGISTER_IF_STILL_DOWN_AFTER: 600000
    GRID_BROWSER_TIMEOUT: 900000
 chromenode:
- image: selenium/node-chrome-debug
+ image: thirdshelf/node-chrome-debug
  volumes:
      - /dev/shm:/dev/shm
  ports:

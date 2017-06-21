@@ -2,6 +2,10 @@ package core.web;
 
 import core.Global;
 import core.Log;
+import io.github.bonigarcia.wdm.ChromeDriverManager;
+import io.github.bonigarcia.wdm.FirefoxDriverManager;
+import io.github.bonigarcia.wdm.InternetExplorerDriverManager;
+import io.github.bonigarcia.wdm.OperaDriverManager;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -65,30 +69,29 @@ public class Browser {
 					e.printStackTrace();
 				}
 			}else{
-				DesiredCapabilities chromeCapabilities = DesiredCapabilities.chrome();
-				System.setProperty("webdriver.chrome.driver", Global.CHROME_DRIVER_PATH);
-				this.setDriver(new ChromeDriver(chromeCapabilities));
+				ChromeDriverManager.getInstance().setup();
+				this.setDriver(new ChromeDriver());
 			}
 			break;
 		case Global.INTERNET_EXPLORER:
+			InternetExplorerDriverManager.getInstance().setup();
 			DesiredCapabilities capabilities = DesiredCapabilities.internetExplorer();
 			capabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
-			System.setProperty("webdriver.ie.driver", Global.IE_DRIVER_PATH);
 			this.setDriver(new InternetExplorerDriver(capabilities));
 			break;
 		case Global.OPERA:
-			System.setProperty("webdriver.opera.driver", Global.OPERA_DRIVER_PATH);
+			OperaDriverManager.getInstance().setup();
 			this.setDriver(new OperaDriver());
 			break;
 		case Global.SAFARI:
 			this.setDriver(new SafariDriver());
 			break;
-		case Global.FIREFOX:			
+		case Global.FIREFOX:
+			FirefoxDriverManager.getInstance().setup();
 			FirefoxProfile fp = new FirefoxProfile();
 			fp.setAcceptUntrustedCertificates(true);
 			fp.setAssumeUntrustedCertificateIssuer(false);
 			setDownloadWithoutAskConfirmationForfirefox(fp);
-			System.setProperty("webdriver.gecko.driver", Global.FIREFOX_DRIVER_PATH);
 			this.setDriver(new FirefoxDriver(fp));
 			break;
 		}
@@ -185,4 +188,30 @@ public class Browser {
     public static void refresh(){
 		getDriver().navigate().refresh();
 	}
+
+	public static void scrollToBottom() {
+		((JavascriptExecutor) getDriver()).executeScript("window.scrollTo(0, document.body.scrollHeight)");
+	}
+
+	public static void scrollByHeight(int height) {
+		((JavascriptExecutor) getDriver()).executeScript("window.scrollBy(0,'"+height+"')", "");
+	}
+
+    public static boolean waitForApplicationToLoad(int... waitTime) {
+        int waitValue = waitTime.length == 0 ? 0 : waitTime[0];
+        WebDriverWait wait = new WebDriverWait(Browser.getDriver(), waitValue);
+        boolean result = false;
+        try {
+            ExpectedCondition<Boolean> appLoadCondition = new ExpectedCondition<Boolean>() {
+                public Boolean apply(WebDriver driver) {
+                    return ((JavascriptExecutor)Browser.getDriver()).executeScript("return document.readyState").equals("complete");
+                }
+            };
+            result = wait.until(appLoadCondition) != null;
+        } catch (Exception ignored) {
+        }
+        Log.info("Application loading. Ready status = " + result);
+        return result;
+    }
+
 }

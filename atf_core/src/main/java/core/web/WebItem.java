@@ -2,23 +2,34 @@ package core.web;
 
 import core.Global;
 import core.Log;
+import core.Reflect;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.annotations.Optional;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 public class WebItem implements WebElement{
 
 	public By byId;
+	private WebElement element;
 
 	private WebElement getItem(int seconds, ExpectedCondition<WebElement> condition) {
 		WebDriverWait wait = new WebDriverWait(Browser.getDriver(), seconds);
-		return wait.until(condition);
+        element = wait.until(condition);
+		return element;
 	}
+
+	public String getElementId() throws NoSuchFieldException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+	    if (element == null){
+            element = getPassiveItem();
+        }
+	    return (String) Reflect.invokeMethod(element, "getId");
+	}
+
 
 	protected WebElement getActiveItem() {
 		return getItem(Global.DEFAULT_EXPLICIT_WAIT, ExpectedConditions.elementToBeClickable(byId));
@@ -199,14 +210,7 @@ public class WebItem implements WebElement{
     }
 
 	public boolean waitForElementToAppear(int... waitTime) {
-		int waitValue = waitTime.length == 0 ? 0 : waitTime[0];
-		boolean result = false;
-		try {
-			result = getItem(waitValue, ExpectedConditions.visibilityOfElementLocated(byId)) != null;
-		} catch (Exception ignored) {
-		}
-		Log.info("'" + byId.toString() + "' visibility verification. Visible = " + result);
-		return result;
+		return isVisible(waitTime);
 	}
 
 	public boolean waitForElementToDisappear(int... waitTime) {
@@ -220,4 +224,25 @@ public class WebItem implements WebElement{
 		Log.info("'" + byId.toString() + "' invisibility verification. Invisible = " + result);
 		return result;
 	}
+
+	public boolean isVisible(int... waitTime) {
+        int waitValue = waitTime.length == 0 ? 0 : waitTime[0];
+		boolean result = false;
+		try {
+			result = this.getItem(waitValue, ExpectedConditions.visibilityOfElementLocated(byId)) != null;
+		}catch (Exception ignored){}
+		Log.info("'" + byId.toString() + "' visibility verification. Visible = " + result);
+		return result;
+	}
+
+	public boolean waitForElementToBeEnabled(int... waitTime){
+        int waitValue = waitTime.length == 0 ? 0 : waitTime[0];
+		boolean result = false;
+		try {
+			result = this.getItem(waitValue, ExpectedConditions.elementToBeClickable(byId)) != null;
+		}catch (Exception ignored){}
+        Log.info(String.format("Waiting for the %s element to be Enabled. Enabled = %s", this.byId.toString(), result));
+        return result;
+    }
+
 }
