@@ -13,12 +13,11 @@ sourceSets {
     main {
         java {
             srcDir 'src/main/java'
-            srcDir '../src/main'
         }
     }
     test {
         java {
-            srcDir '../src/tests/e2e'
+            srcDir 'src/test'
         }
     }
 }
@@ -51,40 +50,10 @@ dependencies {
     compile 'com.atlassian.jira:jira-rest-java-client:2.0.0-m2'
     compile 'com.sun.jersey:jersey-client:1.19'
     compile 'com.google.code.gson:gson:2.6.1'
-    compile files('lib/sqljdbc4.jar')
     compile group: 'com.github.azakordonets', name: 'fabricator_2.11', version: '2.1.2'
     compile group: 'ru.yandex.qatools.allure', name: 'allure-testng-adaptor', version: 'latest.integration'
     agent "org.aspectj:aspectjweaver:1.8.10"
     compile group: 'org.beanshell', name: 'bsh', version: '2.0b5'
     compile group: 'io.github.bonigarcia', name: 'webdrivermanager', version: '1.6.2'
 }
-
-test.doFirst {
-    jvmArgs "-javaagent:${configurations.agent.singleFile}"
-}
-
-task generateTestNGXML(type:JavaExec) {
-    classpath = sourceSets.main.runtimeClasspath
-    main = 'core.xml.GenerateTestNGXml'
-}
-
-
-test {
-	outputs.upToDateWhen { false }
-    classpath = files("config",
-    				  "lib",
-                      project.sourceSets.main.compileClasspath,
-                      project.sourceSets.test.compileClasspath,
-                      project.sourceSets.main.runtimeClasspath,
-                      project.sourceSets.test.runtimeClasspath
-                      )
-    useTestNG() {
-    	useDefaultListeners = true
-        suites "TestNG.xml"
-    }
-    
-}
-
-test.dependsOn generateTestNGXML
-
 
