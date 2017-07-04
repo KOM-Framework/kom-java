@@ -49,5 +49,5 @@ out
 .gradle
 
 # Java Class files
-*.bak
-*.class
+.bak
+.class
