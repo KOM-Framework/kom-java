@@ -1,0 +1,80 @@
+package core.datatypes;
+
+import core.Global;
+import core.utilities.Log;
+import core.web.Browser;
+import core.web.KomElement;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class DropDownList extends KomElement {
+
+	public DropDownList(By by) {
+		super(by);
+	}
+	
+	public void select(String visibleText){
+		Log.info("Selecting '"+visibleText+"' in the '"+this.byId.toString()+"' drop down list");
+		Select userTypeDropdown = new Select(this.getActiveItem());
+		userTypeDropdown.selectByVisibleText(visibleText);
+		Browser.waitForJQueryExecution(Global.DEFAULT_AJAX_WAIT);
+	}
+
+	public void selectDynamicText(String text) {
+		Log.info("Selecting value -'"+text+"' in the '"+this.byId.toString()+"' drop down list");
+		String valueXpath = this.getLocator()+"//*[contains(text(),'"+text+"')]";
+		KomElement optionValue = new KomElement(By.xpath(valueXpath));
+		optionValue.waitForElementToAppear(2);
+		this.select(text);
+	}
+
+	public void select(int index){
+		Log.info("Selecting index-'"+index+"' in the '"+this.byId.toString()+"' drop down list");
+		Select userTypeDropdown = new Select(this.getActiveItem());
+		userTypeDropdown.selectByIndex(index);
+		Browser.waitForJQueryExecution(Global.DEFAULT_AJAX_WAIT);
+	}
+
+	public void selectByValue(String value){
+		Log.info("Selecting value -'"+value+"' in the '"+this.byId.toString()+"' drop down list");
+		Select userTypeDropdown = new Select(this.getActiveItem());
+		userTypeDropdown.selectByValue(value);
+		Browser.waitForJQueryExecution(Global.DEFAULT_AJAX_WAIT);
+	}
+	
+	public String getSelectedOptionName()
+	{
+		String out = "";
+		Select userTypeDropdown = new Select(this.getActiveItem());
+		out=userTypeDropdown.getFirstSelectedOption().getText();
+		Log.info("Getting the selected option of "+this.byId.toString()+"' drop down list: "+out+".");
+		return out;
+	}
+	
+	public ArrayList<String> getOptionNames(){
+		ArrayList<String> out=new ArrayList<String>();
+		Select userTypeDropdown = new Select(this.getActiveItem());
+		List<WebElement> options = userTypeDropdown.getOptions();
+		for(WebElement option:options){
+			out.add(option.getText());
+		}
+		Log.info("Getting option names from the '"+this.byId.toString()+"' list");
+		Log.info("Actual list: "+out);
+		return out;
+	}
+
+	public ArrayList<ArrayList<String>> getOptionNamesByGroup(){
+		List <WebElement> groups = this.getActiveItem().findElements(By.tagName("optgroup"));
+		ArrayList<ArrayList<String>>out=new ArrayList<ArrayList<String>>(groups.size());
+		for (WebElement group:groups){
+			out.add(new ArrayList<String>(Arrays.asList( group.getText().split("\n"))));
+		}
+		return out;
+	}
+	
+}
