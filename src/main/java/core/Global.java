@@ -10,6 +10,7 @@ public class Global {
 	public static final String OPERA = "Opera";
 	public static final String SAFARI = "Safari";
 	public static final String INTERNET_EXPLORER = "IntenetExplorer";
+	public static final String EDGE = "Edge";
 	
 	//Configurations
 	public static final String BROWSER = CHROME;

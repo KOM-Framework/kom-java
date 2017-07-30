@@ -6,6 +6,7 @@ import core.datatypes.Table;
 import core.datatypes.TextField;
 import core.web.Browser;
 import core.web.WebPage;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.allure.annotations.Step;
 
@@ -14,7 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * Created by kuzov on 5/14/2016.
  */
-@FindBy(xpath="//*[@value=\"I'm Feeling Lucky\"]")
+@FindBy(xpath="//*[@title='Google']")
 public class DemoDeclaration extends WebPage{
 
     @FindBy(id="lst-ib")
@@ -26,13 +27,13 @@ public class DemoDeclaration extends WebPage{
 
     @Override
     protected void invokeActions() {
-        Browser.open("http://www.google.ca");
+        Browser.open("http://www.google.com");
     }
 
     @Step("Search for {0} in google")
     public void search(String searchPattern){
         this.searchField.sendKeys(searchPattern);
-        this.search.click();
+        this.searchField.sendKeys(Keys.ENTER);
     }
 
     @Step("Search for {0} in google results")
