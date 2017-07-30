@@ -1,31 +1,15 @@
 package core.web;
 
 import core.Global;
+import core.browsers.*;
 import core.utilities.Log;
-import io.github.bonigarcia.wdm.ChromeDriverManager;
-import io.github.bonigarcia.wdm.FirefoxDriverManager;
-import io.github.bonigarcia.wdm.InternetExplorerDriverManager;
-import io.github.bonigarcia.wdm.OperaDriverManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxProfile;
-import org.openqa.selenium.ie.InternetExplorerDriver;
-import org.openqa.selenium.opera.OperaDriver;
-import org.openqa.selenium.remote.CapabilityType;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 public class Browser {
 
@@ -60,42 +44,29 @@ public class Browser {
 
 	Browser(String browserType) {
 		Log.info("Creating an instance of a "+browserType+" browser");
-		switch (browserType) {
-		case Global.CHROME:
-			if (Global.REMOTE_EXECUTION){
-				DesiredCapabilities capability = DesiredCapabilities.chrome();
-				capability.setCapability("chrome.switches", Arrays.asList("--ignore-certificate-errors"));
-				try {
-					this.setDriver(new RemoteWebDriver(new URL(Global.SELENIUM_HUB),capability));
-				} catch (MalformedURLException e) {
-					e.printStackTrace();
-				}
-			}else{
-				ChromeDriverManager.getInstance().setup();
-				this.setDriver(new ChromeDriver());
+		if (Global.REMOTE_EXECUTION){
+			this.setDriver(new RemoteBrowsers());
+		}else{
+			switch (browserType) {
+				case Global.CHROME:
+					this.setDriver( new KOMChrome().getDriver());
+					break;
+				case Global.INTERNET_EXPLORER:
+					this.setDriver(new KOMInternetExplorer().getDriver());
+					break;
+				case Global.OPERA:
+					this.setDriver(new KOMOpera().getDriver());
+					break;
+				case Global.SAFARI:
+					this.setDriver(new KOMSafari().getDriver());
+					break;
+				case Global.FIREFOX:
+					this.setDriver(new KOMFireFox().getDriver());
+					break;
+				case Global.EDGE:
+					this.setDriver(new KOMEdge().getDriver());
+					break;
 			}
-			break;
-		case Global.INTERNET_EXPLORER:
-			InternetExplorerDriverManager.getInstance().setup();
-			DesiredCapabilities capabilities = DesiredCapabilities.internetExplorer();
-			capabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
-			this.setDriver(new InternetExplorerDriver(capabilities));
-			break;
-		case Global.OPERA:
-			OperaDriverManager.getInstance().setup();
-			this.setDriver(new OperaDriver());
-			break;
-		case Global.SAFARI:
-			this.setDriver(new SafariDriver());
-			break;
-		case Global.FIREFOX:
-			FirefoxDriverManager.getInstance().setup();
-			FirefoxProfile fp = new FirefoxProfile();
-			fp.setAcceptUntrustedCertificates(true);
-			fp.setAssumeUntrustedCertificateIssuer(false);
-			setDownloadWithoutAskConfirmationForfirefox(fp);
-			this.setDriver(new FirefoxDriver(fp));
-			break;
 		}
 	}
 	
@@ -131,23 +102,7 @@ public class Browser {
 			e.printStackTrace();
 		}
 	}
-	
-	private void setDownloadWithoutAskConfirmationForfirefox(FirefoxProfile profile){
-		profile.setPreference("browser.download.folderList", 2);
-		profile.setPreference("browser.download.manager.showWhenStarting", false);
-		profile.setPreference("browser.download.dir", "C:\\Download\\");
-		profile.setPreference("browser.helperApps.neverAsk.openFile",
-		"text/csv,application/x-msexcel,application/excel,application/x-excel,application/vnd.ms-excel,image/png,image/jpeg,text/html,text/plain,application/msword,application/xml,application/zip, application/octet-stream");
-		profile.setPreference("browser.helperApps.neverAsk.saveToDisk",
-		"text/csv,application/x-msexcel,application/excel,application/x-excel,application/vnd.ms-excel,image/png,image/jpeg,text/html,text/plain,application/msword,application/xml,application/zip, application/octet-stream");
-		profile.setPreference("browser.helperApps.alwaysAsk.force", false);
-		profile.setPreference("browser.download.manager.alertOnEXEOpen", false);
-		profile.setPreference("browser.download.manager.focusWhenStarting", false);
-		profile.setPreference("browser.download.manager.useWindow", false);
-		profile.setPreference("browser.download.manager.showAlertOnComplete", false);
-		profile.setPreference("browser.download.manager.closeWhenDone", false);
-	}
-	
+
 	public static void switchToIFrame(By locator, int waitTime) {
 	    Log.info(String.format("Switching to %s iFrame with %s seconds wait", locator.toString(), waitTime));
 		WebDriverWait wait = new WebDriverWait(Browser.getDriver(), waitTime);

@@ -51,3 +51,5 @@ out
 # Java Class files
 .bak
 .class
+.idea/
+kom-java.iml
